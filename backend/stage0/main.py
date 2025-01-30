@@ -31,5 +31,5 @@ async def index() -> Any:
     return IndexResponse(
             email="osamsackeyjude@gmail.com",
             current_datetime=datetime.now().replace(microsecond=0).isoformat(),
-            github_url="https://github.com/judeo-s/HNG-Internship/tree/main"
+            github_url="https://github.com/judeo-s/HNG-Internship/tree/main/backend/stage0"
         )
