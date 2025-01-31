@@ -23,6 +23,6 @@ async def index() -> Any:
     """Index route for HNG Internship Stage 0"""
     return IndexResponse(
             email="osamsackeyjude@gmail.com",
-            current_datetime=datetime.now().replace(microsecond=0).isoformat(),
-            github_url="https://github.com/judeo-s/HNG-Internship/tree/main/backend/stage0"
+            current_datetime=datetime.now().replace(microsecond=0).isoformat()+'Z',
+            github_url="https://github.com/judeo-s/HNG-Internship"
         )
