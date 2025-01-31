@@ -44,6 +44,11 @@ uvicorn main:app --reload
 
 The server will start on `http://127.0.0.1:8000`. You can access the API documentation at `http://127.0.0.1:8000/docs`.
 
+
+## Documentation Links
+- [Postman Documentaion](https://documenter.getpostman.com/view/37655731/2sAYX2Pk3y)
+
+
 ## Reference Links
 
 - [Python Developer](https://hng.tech/hire/python-developers)
