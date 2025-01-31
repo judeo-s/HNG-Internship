@@ -44,6 +44,11 @@ uvicorn main:app --reload
 
 The server will start on `http://127.0.0.1:8000`. You can access the API documentation at `http://127.0.0.1:8000/docs`.
 
+## Reference Links
+
+- [Python Developer](https://hng.tech/hire/python-developers)
+
+
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
