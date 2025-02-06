@@ -52,12 +52,12 @@ async def classify_number(number: Optional[str] = Query(None, description="Numbe
             - error (bool): True if there was an error, False otherwise.
     """
     if number is None:
-        return Response(status_code=status.HTTP_400_BAD_REQUEST, content=json.dumps({"number": None, "error": True}), media_type="application/json")
+        return Response(status_code=status.HTTP_400_BAD_REQUEST, content=json.dumps({"number": "alphabet", "error": True}), media_type="application/json")
     try:
         num = int(number)
     except ValueError:
         return Response(status_code=status.HTTP_400_BAD_REQUEST,
-                        content=json.dumps({"number": f"{number}", "error": True}), media_type="application/json")
+                        content=json.dumps({"number": "alphabet", "error": True}), media_type="application/json")
 
     armstrong = is_armstrong(num)
     odd = is_odd(num)
