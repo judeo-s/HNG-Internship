@@ -16,9 +16,13 @@ def is_prime(n: int) -> bool:
     Returns:
         bool: True if the number is prime, False if it is not.
     """
-    if n < 2:
+    if n <= 1:
         return False
-    for i in range(2, int(n ** 0.5) + 1):
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
         if n % i == 0:
             return False
     return True
@@ -43,7 +47,7 @@ def is_perfect(n: int) -> bool:
     return sum(i for i in range(1, n) if n % i == 0) == n
 
 
-def is_armstrong(n: int) -> bool:
+def is_armstrong(num: int) -> bool:
     """
     Checks if a number is an Armstrong number.
 
@@ -56,9 +60,44 @@ def is_armstrong(n: int) -> bool:
     Returns:
         bool: True if the number is an Armstrong number, False if it is not.
     """
-    digits = [int(d) for d in str(n)]
-    power = len(digits)
-    return sum(d ** power for d in digits) == n
+    if num == 0:
+        return False
+    sum_of_divisors = 0
+    for i in range(1, abs(num) // 2 + 1):
+        if num % i == 0:
+            sum_of_divisors += i
+    return num == sum_of_divisors
+
+
+def is_odd(num: int) -> bool:
+    """
+    Checks if a number is odd.
+
+    An odd number is an integer which is not divisible by 2.
+
+    Args:
+        num (int): The number to check.
+
+    Returns:
+        bool: True if the number is odd, False if it is even.
+    """
+
+    return num % 2 != 0
+
+
+def is_even(num: int) -> bool:
+    """
+    Checks if a number is even.
+
+    An even number is an integer which is divisible by 2.
+
+    Args:
+        num (int): The number to check.
+
+    Returns:
+        bool: True if the number is even, False if it is odd.
+    """
+    return num % 2 == 0
 
 
 def digit_sum(n: int) -> int:
@@ -71,8 +110,7 @@ def digit_sum(n: int) -> int:
     Returns:
         int: The sum of the digits of the number.
     """
-
-    return sum(int(d) for d in str(n))
+    return sum(int(d) for d in str(abs(int(n))))
 
 
 async def get_fun_fact(n: int) -> str:

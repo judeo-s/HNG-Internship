@@ -1,8 +1,14 @@
 from fastapi import FastAPI, Query, status, Response
 from fastapi.middleware.cors import CORSMiddleware
+from typing import List, Optional
 import json
-from typing import Any
-from utils import is_armstrong, is_prime, is_perfect, digit_sum, get_fun_fact
+from utils import (
+    is_even,
+    is_odd,
+    is_armstrong,
+    is_prime, is_perfect,
+    digit_sum,
+    get_fun_fact)
 """
 Number Facts API that provides interesting mathematical properties about a given number,
 along with a fun fact
@@ -20,49 +26,63 @@ app.add_middleware(
 
 
 @app.get("/api/classify-number")
-async def classify_number(number: Any = Query(...)) -> Any:
+async def classify_number(number: Optional[str] = Query(None, description="Number to classify")):
     """
-    Classify a given number, given as a query parameter, into its properties such as
-    whether it is prime, perfect, armstrong, odd or even, and provides a fun fact
+    Classifies a given number by evaluating its mathematical properties 
+    and provides a fun fact.
+
+    This endpoint accepts an optional number as a query parameter and 
+    checks if the number is Armstrong, odd, even, prime, and perfect. 
+    It also calculates the sum of its digits and fetches a fun fact 
     about the number.
 
     Args:
-        number: The number whose properties are to be classified
+        number (Optional[str]): The number to classify. If not provided, 
+        returns an error response.
 
     Returns:
-        A JSON response with the following keys:
-        - number: The given number
-        - is_prime: Whether the number is prime
-        - is_perfect: Whether the number is perfect
-        - properties: A list of properties the number has
-        - digit_sum: The sum of the digits of the number
-        - fun_fact: A fun fact about the number
-
-    Raises:
-        Bad Request (400) if the number given is not an integer
+        JSON response containing:
+            - number (str): The input number.
+            - is_prime (bool): Whether the number is prime.
+            - is_perfect (bool): Whether the number is perfect.
+            - properties (List[str]): List of properties the number satisfies 
+              (e.g., "armstrong", "odd", "even").
+            - digit_sum (int): The sum of the digits of the number.
+            - fun_fact (str): A fun fact about the number.
+            - error (bool): True if there was an error, False otherwise.
     """
+    if number is None:
+        return Response(status_code=status.HTTP_400_BAD_REQUEST, content=json.dumps({"number": None, "error": True}), media_type="application/json")
     try:
-        number = int(number)
-        armstrong = is_armstrong(number)
-        properties = []
-        if armstrong:
-            properties.append("armstrong")
-        properties.append("odd" if number % 2 else "even")
+        num = int(number)
+    except ValueError:
+        return Response(status_code=status.HTTP_400_BAD_REQUEST,
+                        content=json.dumps({"number": f"{number}", "error": True}), media_type="application/json")
 
-        fact = await get_fun_fact(number)
+    armstrong = is_armstrong(num)
+    odd = is_odd(num)
+    even = is_even(num)
+    properties: List[str] = []
 
-        return {
-            "number": number,
-            "is_prime": is_prime(number),
-            "is_perfect": is_perfect(number),
-            "properties": properties,
-            "digit_sum": digit_sum(number),
-            "fun_fact": fact
-        }
+    if armstrong and odd:
+        properties = ["armstrong", "odd"]
+    elif armstrong and even:
+        properties = ["armstrong", "even"]
+    elif odd:
+        properties = ["odd"]
+    elif even:
+        properties = ["even"]
+
+    try:
+        fun_fact = await get_fun_fact(num)
     except Exception as e:
-        error_message = {"number": "alphabet", "error": True}
-        return Response(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content=json.dumps(error_message),
-            media_type="application/json"
-        )
+        fun_fact = f"Error fetching fun fact: {e}"
+
+    return {
+        "number": number,
+        "is_prime": is_prime(num),
+        "is_perfect": is_perfect(num),
+        "properties": properties,
+        "digit_sum": digit_sum(number),
+        "fun_fact": fun_fact,
+    }
