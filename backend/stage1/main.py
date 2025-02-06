@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Query, status, Response
+from fastapi import FastAPI, Query, status
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
 import json
@@ -52,12 +53,11 @@ async def classify_number(number: Optional[str] = Query(None, description="Numbe
             - error (bool): True if there was an error, False otherwise.
     """
     if number is None:
-        return Response(status_code=status.HTTP_400_BAD_REQUEST, content=json.dumps({"number": "alphabet", "error": True}), media_type="application/json")
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"number": "null", "error": True})
     try:
         num = int(number)
     except ValueError:
-        return Response(status_code=status.HTTP_400_BAD_REQUEST,
-                        content=json.dumps({"number": "alphabet", "error": True}), media_type="application/json")
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"number": f"{number}", "error": True})
 
     armstrong = is_armstrong(num)
     odd = is_odd(num)
@@ -78,11 +78,11 @@ async def classify_number(number: Optional[str] = Query(None, description="Numbe
     except Exception as e:
         fun_fact = f"Error fetching fun fact: {e}"
 
-    return {
+    return JSONResponse(status_code=status.HTTP_200_OK, content={
         "number": number,
         "is_prime": is_prime(num),
         "is_perfect": is_perfect(num),
         "properties": properties,
         "digit_sum": digit_sum(number),
         "fun_fact": fun_fact,
-    }
+    })
