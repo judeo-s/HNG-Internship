@@ -60,10 +60,7 @@ def is_armstrong(num: int) -> bool:
     Returns:
         bool: True if the number is an Armstrong number, False if it is not.
     """
-    num_str = str(num)
-    num_digits = len(num_str)
-    sum_of_powers = sum(int(digit) ** num_digits for digit in num_str)
-    return sum_of_powers == num
+    return sum(int(d) ** len(str(num)) for d in str(abs(num))) == num
 
 
 def is_odd(num: int) -> bool:
