@@ -52,7 +52,7 @@ async def classify_number(number: Optional[str] = Query(None, description="Numbe
             - fun_fact (str): A fun fact about the number.
             - error (bool): True if there was an error, False otherwise.
     """
-    if number is None:
+    if number is None or len(number) == 0:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"error": True})
     try:
         num = int(number)
